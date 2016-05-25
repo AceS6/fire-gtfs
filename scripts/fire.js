@@ -37,7 +37,7 @@ function fire(date){
 							var time = times['times'][i];
 							var departure_time = time['departure_time'].substring(0,5);
 							//var fire = new Date();
-							var fire = new Date("May 25, 2016 23:42:00");
+							var fire = new Date("May 26, 2016 00:29:00");
 							//fire.setHours(departure_time.substring(0,2));
 							//fire.setMinutes(departure_time.substring(3,5)-10);
 							fire.setSeconds(0);
@@ -58,7 +58,7 @@ function fire(date){
 var sendDepartureFunc = function(departure_time, route_short_name, trip_name, stop_name, schema, route_id, stop_id, direction_id, route_color) {
     return function() {
 	console.log("Firing "+departure_time);
-	sendNotification(route_short_name+" -> "+trip_name, stop_name+" : prochain à "+departure_time, schema+"-"+route_id+"-"+stop_id+"-"+direction_id, route_color);
+	sendNotification(route_short_name+" -> "+trip_name, departure_time+" (prochain départ à "+stop_name+")", schema+"-"+route_id+"-"+stop_id+"-"+direction_id, route_color);
     }
 }
 
@@ -66,7 +66,7 @@ var sendDepartureFunc = function(departure_time, route_short_name, trip_name, st
 function sendNotification(title, body, topic, color){
 	var message = new gcm.Message();
         message.addNotification('title',  title);
-        message.addNotification('icon', 'ic_notification_tray_icon');
+        //message.addNotification('icon', 'ic_notification_tray_icon');
         message.addNotification('body', body);
         message.addNotification('tag', topic);
 	message.addNotification("time_to_live", 300); // 5 minutes timeout
