@@ -2,7 +2,6 @@ var gcm = require('../lib/node-gcm');
 var requestify = require('requestify'); 
 var schedule = require('node-schedule');
 var sender = new gcm.Sender(process.env.SERVER_GCM_KEY);
-//var sender = new gcm.Sender('AIzaSyA7HSHqcBnRVDtNgA7u_qvbk6unlzbBbhY');
 
 var now = new Date();
 now.setMinutes(now.getMinutes()+1);
