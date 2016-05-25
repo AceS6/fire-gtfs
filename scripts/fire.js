@@ -27,24 +27,22 @@ function fire(date){
 					var route_id = subscriptions['time_subscriptions'][i]['route_id'];
 					var trip_name = subscriptions['time_subscriptions'][i]['trip_name'];
 					var stop_name = subscriptions['time_subscriptions'][i]['stop_name'];
+					var direction_id = subscriptions['time_subscriptions'][i]['direction_id'];
 					var route_short_name = subscriptions['time_subscriptions'][i]['route_short_name'];
 					var route_color = subscriptions['time_subscriptions'][i]['route_color'];
-					//var fire = new Date("May 25, 2016 16:26:00");
 					sendNotification("Mise à jour des horaires", "Date "+date.toString(), "global");				
 					requestify.get('http://localhost:8087/times/list?schema='+schema+'&stop_id='+stop_id+'&route_id='+route_id).then(function(response) {
 			                        var times = response.getBody();
 						for (var i=0; i<times['times'].length; i++){
 							var time = times['times'][i];
 							var departure_time = time['departure_time'].substring(0,5);
-							var fire = new Date();
-							fire.setHours(departure_time.substring(0,2));
-							fire.setMinutes(departure_time.substring(3,5)-10);
+							//var fire = new Date();
+							var fire = new Date("May 25, 2016 23:42:00");
+							//fire.setHours(departure_time.substring(0,2));
+							//fire.setMinutes(departure_time.substring(3,5)-10);
 							fire.setSeconds(0);
 							console.log("Departure "+departure_time+" will be fired at "+fire);
-	                	                        var j = schedule.scheduleJob(fire, function(){
-								console.log("Firing "+departure_time);
-								sendNotification(route_short_name+" -> "+trip_name, stop_name+" : prochain à "+departure_time, schema+"-"+route_id+"-"+stop_id, route_color);
-	                                        	});
+	                	                        var j = schedule.scheduleJob(fire, sendDepartureFunc(departure_time, route_short_name, trip_name, stop_name, schema, route_id, stop_id, direction_id, route_color));
 						}
 					});
 	        		}	
@@ -56,6 +54,14 @@ function fire(date){
 	
 	});
 }
+
+var sendDepartureFunc = function(departure_time, route_short_name, trip_name, stop_name, schema, route_id, stop_id, direction_id, route_color) {
+    return function() {
+	console.log("Firing "+departure_time);
+	sendNotification(route_short_name+" -> "+trip_name, stop_name+" : prochain à "+departure_time, schema+"-"+route_id+"-"+stop_id+"-"+direction_id, route_color);
+    }
+}
+
 
 function sendNotification(title, body, topic, color){
 	var message = new gcm.Message();
