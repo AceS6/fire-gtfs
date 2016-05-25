@@ -24,6 +24,7 @@ app.use(morgan('dev'));
 
 var index = require('./lib/routes/index');
 var trips  = require('./lib/routes/trips');
+var services = require('./lib/routes/services');
 var routes  = require('./lib/routes/routes');
 var stops  = require('./lib/routes/stops');
 var times  = require('./lib/routes/times');
@@ -32,6 +33,7 @@ var schemas  = require('./lib/routes/schemas');
 
 app.use('/', index);
 app.use('/trips', trips);
+app.use('/services', services);
 app.use('/routes', routes);
 app.use('/stops', stops);
 app.use('/times', times);
