@@ -43,7 +43,7 @@ function fire(date){
 							fire.setSeconds(0);
 							console.log("Departure "+departure_time+" will be fired at "+fire);
 	                	                        var j = schedule.scheduleJob(fire, function(){
-								console.log("ça balance");
+								console.log("Firing "+departure_time);
 								sendNotification(route_short_name+" -> "+trip_name, stop_name+" : prochain à "+departure_time, schema+"-"+route_id+"-"+stop_id, route_color);
 	                                        	});
 						}
