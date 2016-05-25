@@ -59,7 +59,7 @@ ConnectionManager.prototype.refreshTypeParser = function(dataTypes) {
         throw new Error('Parse function not supported for type ' + dataType.key + ' in dialect ' + this.dialectName);
       }
     }
-  }, this);
+  }.bind(this));
 };
 
 ConnectionManager.prototype.onProcessExit = function() {
@@ -243,7 +243,11 @@ ConnectionManager.prototype.releaseConnection = function(connection) {
 };
 
 ConnectionManager.prototype.$connect = function(config) {
-  return this.dialect.connectionManager.connect(config);
+  return this.sequelize.runHooks('beforeConnect', config).bind(this).then(function () {
+    return this.dialect.connectionManager.connect(config).then(function (connection) {
+      return connection;
+    });
+  });
 };
 ConnectionManager.prototype.$disconnect = function(connection) {
   return this.dialect.connectionManager.disconnect(connection);
